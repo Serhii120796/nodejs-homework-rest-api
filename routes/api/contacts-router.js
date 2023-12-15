@@ -1,28 +1,17 @@
 import express from "express";
+import contactsController from '../../controllers/contacts-controller.js';
+import { isEmptyBody } from '../../middleware/isEmptyBody';
 
-import contactsService from "../../models/contacts/index.js";
+const contactsRouter = express.Router();
 
-const contactsRouter = express.Router()
+contactsRouter.get("/", contactsController.getAll);
 
-contactsRouter.get('/', async (req, res, next) => {
-  const result = await contactsService.listContacts();
-  res.json(result);
-})
+contactsRouter.get("/:id", contactsController.getById);
 
-contactsRouter.get('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.post("/", contactsController.add);
 
-contactsRouter.post('/', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.delete("/:id", contactsController.deleteById);
 
-contactsRouter.delete('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
-
-contactsRouter.put('/:contactId', async (req, res, next) => {
-  res.json({ message: 'template message' })
-})
+contactsRouter.put("/:id", isEmptyBody, contactsController.updateById);
 
 export default contactsRouter;
