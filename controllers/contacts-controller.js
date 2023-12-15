@@ -42,7 +42,7 @@ const deleteById = async (req, res, next) => {
     if (!result) {
       throw HttpError(404, "Not found");
     }
-    res.status(200).json({"message": "contact deleted"});
+    res.status(200).json({ message: "contact deleted" });
   } catch (error) {
     next(error);
   }
@@ -63,8 +63,6 @@ const updateById = async (req, res, next) => {
     next(error);
   }
 };
-
-
 
 export default {
   getAll,
