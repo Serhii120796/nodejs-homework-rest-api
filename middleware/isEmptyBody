@@ -7,3 +7,11 @@ export const isEmptyBody = (req, _, next) => {
   }
   next();
 };
+
+export const isEmptyFavorite = (req, _, next) => {
+  const { length } = Object.keys(req.body);
+  if (!length) {
+    return next(HttpError(400, "missing field favorite"));
+  }
+  next();
+};
