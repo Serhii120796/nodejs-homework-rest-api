@@ -14,6 +14,10 @@ const contactSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
   },
   { versionKey: false }
 );
@@ -27,14 +31,14 @@ const message = { "any.required": "missing required field" };
 export const contactAddSchema = Joi.object({
   name: Joi.string().required().messages(message),
   email: Joi.string().required().messages(message),
-  phone: Joi.number().min(10).required().messages(message),
+  phone: Joi.string().required().messages(message),
   favorite: Joi.boolean(),
 });
 
 export const contactUpdateSchema = Joi.object({
   name: Joi.string(),
   email: Joi.string(),
-  phone: Joi.number(),
+  phone: Joi.string(),
   favorite: Joi.boolean(),
 });
 
