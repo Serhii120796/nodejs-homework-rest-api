@@ -1,20 +1,20 @@
 import multer from "multer";
 import path from "path";
 
-const destination = path.resolve('tmp');
+const destination = path.resolve("tmp");
 
 const storage = multer.diskStorage({
-    destination,
-    filename: (req, file, cb) => {
+  destination,
+  filename: (_, file, cb) => {
     cb(null, file.originalname);
-    },
-    limits: {
+  },
+  limits: {
     fileSize: 1048576,
   },
 });
 
 const upload = multer({
-    storage,
+  storage,
 });
 
 export default upload;

@@ -109,11 +109,13 @@ const updateStatusUser = async (req, res, next) => {
 const updateAvatar = async (req, res, next) => {
   try {
     const { _id } = req.user;
-    const { path: oldPath, originalname } = req.file;
-    const filename = `${_id}_${originalname}`;
-    const newPath = path.join(avatarsPath, filename);
+    const { path: oldPath } = req.file;
+    const jimpImage = await Jimp.read(oldPath);
+    jimpImage.resize(250, 250).writeAsync(oldPath);
+    const fileName = `${_id}.jpg`;
+    const newPath = path.join(avatarsPath, fileName);
     await fs.rename (oldPath, newPath);
-    const avatarURL = path.join('avatars', filename);
+    const avatarURL = path.join('avatars', fileName);
     await User.findByIdAndUpdate(_id, { avatarURL });
     res.json({ avatarURL });
   } catch (error) {
