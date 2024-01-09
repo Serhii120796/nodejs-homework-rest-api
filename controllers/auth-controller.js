@@ -4,8 +4,14 @@ import { userSignupSchema, userSigninSchema, userUpdateSubscriptionSchema } from
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import gravatar from 'gravatar';
+import path from "path";
+import fs from "fs/promises";
+import Jimp from "jimp";
 
 const { SECRET_KEY } = process.env;
+
+const avatarsPath = path.resolve('public', 'avatars');
 
 const signup = async (req, res, next) => {
   try {
@@ -22,7 +28,8 @@ const signup = async (req, res, next) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const avatarURL = gravatar.url(email);
+    const newUser = await User.create({ ...req.body, password: hashPassword, avatarURL });
     res.status(201).json({
       user: {
         email,
@@ -89,7 +96,7 @@ const updateStatusUser = async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const result = await User.findByIdAndUpdate(req.user._id, req.body, { new: true, runValidators: true });
-    console.log(result);
+
     if (!result) {
       throw HttpError(404, "Not found");
     }
@@ -99,10 +106,26 @@ const updateStatusUser = async (req, res, next) => {
   }
 };
 
+const updateAvatar = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { path: oldPath, originalname } = req.file;
+    const filename = `${_id}_${originalname}`;
+    const newPath = path.join(avatarsPath, filename);
+    await fs.rename (oldPath, newPath);
+    const avatarURL = path.join('avatars', filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+    res.json({ avatarURL });
+  } catch (error) {
+    next(error);
+}
+}
+
 export default {
   signup,
   signin,
   getCurrent,
   logout,
   updateStatusUser,
+  updateAvatar,
 };

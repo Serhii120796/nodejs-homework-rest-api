@@ -1,6 +1,6 @@
 import { HttpError } from "../helpers/HttpError.js";
 
-export const isEmptyBody = (req, _, next) => {
+const isEmptyBody = (req, _, next) => {
   const { length } = Object.keys(req.body);
   if (!length) {
     const isFavoritePath = req.path.includes("/favorite");
@@ -9,3 +9,5 @@ export const isEmptyBody = (req, _, next) => {
   }
   next();
 };
+
+export default isEmptyBody;
