@@ -18,14 +18,14 @@ describe("test /api/users/register", () => {
     server.close();
   });
 
-  afterEach(async () => {
-    await User.deleteMany({});
-  });
+  // afterEach(async () => {
+  //   await User.deleteMany({});
+  // });
 
   test("test signup with correctData", async () => {
     const signupData = {
-      email: "saturda@gmail.com",
-      password: "saturda",
+      email: "friday@gmail.com",
+      password: "friday",
     };
 
     const { statusCode, body } = await request(app).post("/api/users/register").send(signupData);
@@ -35,4 +35,21 @@ describe("test /api/users/register", () => {
     const user = await User.findOne({ email: signupData.email });
     expect(user.email).toBe(signupData.email);
   });
+
+  test("test login with correctData", async () => {
+    const signinData = {
+      email: "friday@gmail.com",
+      password: "friday",
+    };
+
+    const { statusCode, body } = await request(app).post("/api/users/login").send(signinData);
+    expect(statusCode).toBe(200);
+    expect(body.token).toBeDefined();
+    expect(Object.keys(body.user).length).toBe(2);
+    expect(typeof body.user.email).toBe("string");
+    expect(typeof body.user.subscription).toBe("string");
+
+  });
+
+
 });
