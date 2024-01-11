@@ -4,14 +4,14 @@ import { userSignupSchema, userSigninSchema, userUpdateSubscriptionSchema } from
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
-import gravatar from 'gravatar';
+import gravatar from "gravatar";
 import path from "path";
 import fs from "fs/promises";
 import Jimp from "jimp";
 
 const { SECRET_KEY } = process.env;
 
-const avatarsPath = path.resolve('public', 'avatars');
+const avatarsPath = path.resolve("public", "avatars");
 
 const signup = async (req, res, next) => {
   try {
@@ -111,17 +111,18 @@ const updateAvatar = async (req, res, next) => {
     const { _id } = req.user;
     const { path: oldPath } = req.file;
     const jimpImage = await Jimp.read(oldPath);
-    jimpImage.resize(250, 250).writeAsync(oldPath);
+    jimpImage.resize(250, 250);
+    await jimpImage.writeAsync(oldPath);
     const fileName = `${_id}.jpg`;
     const newPath = path.join(avatarsPath, fileName);
-    await fs.rename (oldPath, newPath);
-    const avatarURL = path.join('avatars', fileName);
+    await fs.rename(oldPath, newPath);
+    const avatarURL = path.join("avatars", fileName);
     await User.findByIdAndUpdate(_id, { avatarURL });
     res.json({ avatarURL });
   } catch (error) {
     next(error);
-}
-}
+  }
+};
 
 export default {
   signup,
