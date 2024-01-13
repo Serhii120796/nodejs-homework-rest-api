@@ -108,6 +108,9 @@ const updateStatusUser = async (req, res, next) => {
 
 const updateAvatar = async (req, res, next) => {
   try {
+    if (!req.file) {
+      throw HttpError(400, "Please add a file with an image");
+    }
     const { _id } = req.user;
     const { path: oldPath } = req.file;
     const jimpImage = await Jimp.read(oldPath);
