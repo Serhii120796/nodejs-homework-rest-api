@@ -1,12 +1,16 @@
 import express from "express";
 import authController from "../../controllers/auth-controller.js";
-import { authenticate, upload } from "../../middleware/index.js";
+import { isEmptyBody, authenticate, upload } from "../../middleware/index.js";
 
 const router = express.Router();
 
-router.post("/register", authController.signup);
+router.post("/register", isEmptyBody, authController.signup);
 
-router.post("/login", authController.signin);
+router.get("/verify/:verificationToken", authController.verify);
+
+router.post("/verify", isEmptyBody, authController.resendVerifyEmail);
+
+router.post("/login", isEmptyBody, authController.signin);
 
 router.get("/current", authenticate, authController.getCurrent);
 

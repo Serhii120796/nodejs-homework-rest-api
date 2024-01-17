@@ -1,5 +1,5 @@
 import Contact from "../models/Contact.js";
-import { HttpError } from "../helpers/HttpError.js";
+import { HttpError } from "../helpers/index.js";
 import { contactAddSchema, contactUpdateSchema, contactsUpdateFavoriteSchema } from "../models/Contact.js";
 
 const getAll = async (req, res, next) => {
