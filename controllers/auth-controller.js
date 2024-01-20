@@ -61,7 +61,7 @@ const verify = async (req, res, next) => {
     }
     await User.findByIdAndUpdate(user._id, { verify: true, verificationToken: null });
     res.status(200).json({
-      message: 'Verification successful',
+      message: "Verification successful",
     });
   } catch (error) {
     next(error);
@@ -85,7 +85,7 @@ const resendVerifyEmail = async (req, res, next) => {
       throw HttpError(400, "Verification has already been passed");
     }
 
- const verifyEmail = {
+    const verifyEmail = {
       to: email,
       subject: "Verify email",
       html: `<a target="_blank" href="${BASE_URL}/api/users/verify/${user.verificationToken}">Click to verify email</a>`,
@@ -93,12 +93,11 @@ const resendVerifyEmail = async (req, res, next) => {
 
     await sendEmail(verifyEmail);
 
-    res.status(200).json({ message: "Verification email sent"});
-
+    res.status(200).json({ message: "Verification email sent" });
   } catch (error) {
     next(error);
   }
-}
+};
 
 const signin = async (req, res, next) => {
   try {

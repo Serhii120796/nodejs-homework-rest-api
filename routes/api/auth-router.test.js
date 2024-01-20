@@ -18,10 +18,6 @@ describe("test /api/users/register", () => {
     server.close();
   });
 
-  // afterEach(async () => {
-  //   await User.deleteMany({});
-  // });
-
   test("test signup with correctData", async () => {
     const signupData = {
       email: "friday@gmail.com",
@@ -48,8 +44,5 @@ describe("test /api/users/register", () => {
     expect(Object.keys(body.user).length).toBe(2);
     expect(typeof body.user.email).toBe("string");
     expect(typeof body.user.subscription).toBe("string");
-
   });
-
-
 });
